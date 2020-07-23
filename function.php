@@ -4,28 +4,31 @@ function getNepaliNumberFormat($number, $division=1000, &$last = array()){
     if($number < 1000 && empty($last)){
         return eng_nep($number);
     }
-
     $rem = $number%$division;
-
-    if($division == 100 && $rem == 0){
-    	$rem = "00";
+    if($division == 100 ){
+        if($rem == 0){
+            $rem = "00";
+        } elseif(strlen($rem) < 2) {
+            $rem = "0".$rem;
+        }
     }
-
-    if($division == 1000 && $rem == 0){
-    	$rem = "000";
+    if($division == 1000 ){
+        if($rem == 0){
+            $rem = "000";
+        } elseif(strlen($rem) < 3){
+            $rem ="0".$rem;
+        } else if(strlen($rem) < 2){
+            $rem = "00".$rem;
+        }
     }
-
     $quo = (int)($number/$division);
     $last[] =$rem;
-
     if($quo > 99){
         getNepaliNumberFormat($quo, 100, $last);
     } else {
         $last[] = (int)($quo);
     }
-
     $nep = implode(",", array_reverse($last));
-
     return eng_nep($nep);
 }
 
